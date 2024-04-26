@@ -56,10 +56,12 @@ public class CarRentalSystem {
     }
 
     public void rentCar(Car car, Customer customer, int days) {
+        // System.out.println(car.isAvailable());
         if (car.isAvailable()) {
             car.rent();
             rentals.add(new Rental(car, customer, days));
-
+            saveCarsToCsv(); // Update availability in CSV
+    
         } else {
             System.out.println("Car is not available for rent.");
         }
@@ -76,11 +78,13 @@ public class CarRentalSystem {
         }
         if (rentalToRemove != null) {
             rentals.remove(rentalToRemove);
-
+            saveCarsToCsv(); // Update availability in CSV
+    
         } else {
             System.out.println("Car was not rented.");
         }
     }
+    
 
     public void menu() {
         Scanner scanner = new Scanner(System.in);
@@ -108,6 +112,7 @@ public class CarRentalSystem {
                     System.out.printf("%-8s %-15s %-15s %-15s%n", "S.No.", "Car ID", "Brand", "Model");
                     int cnt = 1;
                     for (Car car : cars) {
+                        // System.out.println(car.isAvailable());
                         if (car.isAvailable()) {
                             System.out.printf("%-8d %-15s %-15s %-15s%n", cnt++, car.getCarId(), car.getBrand(), car.getModel());
                         }
@@ -151,7 +156,7 @@ public class CarRentalSystem {
                     if (selectedCar != null) {
                         double totalPrice = selectedCar.calculatePrice(rentalDays);
                         System.out.println("\n╔══════════════════════════════════════╗");
-                        System.out.println("║           Rental Information          ║");
+                        System.out.println("║           Rental Information         ║");
                         System.out.println("╠══════════════════════════════════════╣");
                         System.out.printf("%-15s %-15s%n", "Customer ID:", newCustomer.getCustomerId());
                         System.out.printf("%-15s %-15s%n", "Customer Name:", newCustomer.getName());
@@ -213,7 +218,7 @@ public class CarRentalSystem {
                     System.out.println("║               Add a Car            ║");
                     System.out.println("╠════════════════════════════════════╣");
                     Scanner sc = new Scanner(System.in);
-                    System.out.print("Enter car ID in format of C0XX: "); // will generate random car id in future
+                    System.out.print("Enter car ID in format of C0XX: "); 
                     String userCarId = sc.nextLine();
                     System.out.print("Enter brand: ");
                     String userBrand = sc.nextLine();
@@ -221,6 +226,17 @@ public class CarRentalSystem {
                     String userModel = sc.nextLine();
                     System.out.print("Enter base price to charge per day: ");
                     double userBasePricePerDay = sc.nextDouble();
+                    
+                    // String randomCarId;
+                    // boolean isUnique = false;
+                    // while (!isUnique) {
+                    //     randomCarId = "C" + String.format("%04d", (int) (Math.random() * 10000));
+                    //     boolean idExists = cars.stream().anyMatch(c -> c.getCarId().equals(randomCarId));
+                    //     if (!idExists) {
+                    //         car.setCarId(randomCarId);
+                    //         isUnique = true;
+                    //     }
+                    // }
     
                     Car userCar = new Car(userCarId, userBrand, userModel, userBasePricePerDay);
                     // cars.add(userCar);
